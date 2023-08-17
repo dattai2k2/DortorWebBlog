@@ -1,0 +1,96 @@
+﻿@model X.PagedList.IPagedList<Doctors_Web_Forum_FE.Models.Question>
+
+@using X.PagedList.Mvc.Core;
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Areas/admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+<div class="card">
+    <form action="admin/questions" method="get">
+        <div class="input-group card-body pb-0" style=" width: 37%;">
+
+            <input type="text" class="form-control" name="title" placeholder="Search..." value="@ViewBag.titleSearch">
+            <button class="btn btn-outline-primary" type="submit" id="button-addon2">Search</button>
+
+        </div>
+    </form>
+    <h5 class="card-header">List of Users</h5>
+    <div class="card-body">
+        <div class="table-responsive text-nowrap">
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Maker</th>
+                        <th>Title</th>
+                        <th>Answers Total</th>
+                        <th>Status</th>
+                        <th>Created Date</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>
+                                <div class="d-flex align-items-start align-items-sm-center gap-4">
+                                    <img src="@item.Account.Avatar" alt="user-avatar" class="d-block rounded" height="60" width="60" id="uploadedAvatar">
+                                    <div class="button-wrapper">
+
+                                        <p class="fw-bold mb-0">@item.Account.DisplayName</p>
+                                        <p class=" mb-0">@item.Account.Email</p>
+                                    </div>
+                                </div>
+
+                            </td>
+                            <td> @item.Title </td>
+                            <td>  @item.TotalQuestion</td>
+                            <td>
+                                @if (@item.Status == true)
+                                {
+                                    <span class="badge bg-label-success me-1">Pass</span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-label-warning me-1">Fail</span>
+                                }
+
+                            </td>
+                            <td>  <span>@String.Format("{0:MM/dd/yyyy}", @item.CreateDate)</span></td>
+                            <td>
+                                <div class="dropdown">
+                                    @if (@item.Status == true)
+                                    {
+                                        <a href="admin/questions/lock/@item.QuestionId"><button type="button" class="btn btn-sm btn-danger"><i class="menu-icon tf-icons bx bx-lock-open-alt"></i>Lock</button></a>
+                                    }
+                                    else
+                                    {
+                                        <a href="admin/questions/pass/@item.QuestionId"><button type="button" class="btn btn-sm btn-success">receive</button></a>
+                                    }
+
+                                </div>
+                            </td>
+                        </tr>
+                    }
+
+                </tbody>
+            </table>
+
+        </div>
+        <div class="col-md-12 mt-5 d-flex" style="width: 100%;justify-content: space-between;">
+            <div> Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount</div>
+
+            @Html.PagedListPager(Model, page => Url.Action("Index",
+                new { page, title = @ViewBag.titleSearch }),
+
+                new PagedListRenderOptions
+                {
+                    LiElementClasses = new string[] { "page-item" },
+                    PageClasses = new string[] { "page-link" }
+                })
+
+        </div>
+    </div>
+</div>
+

@@ -1,0 +1,133 @@
+﻿@using Microsoft.AspNetCore.Http
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
+<div id="searchDropdown" class="hs-unfold-content dropdown-unfold search-fullwidth d-md-none">
+    <form action="question" method="get" class="input-group input-group-merge input-group-borderless">
+        <div class="input-group-prepend">
+            <div class="input-group-text">
+                <i class="tio-search"></i>
+            </div>
+        </div>
+        <input class="form-control rounded-0" type="search" name="title" placeholder="Search in front" aria-label="Search in front">
+        <div class="input-group-append">
+            <div class="input-group-text">
+                <div class="hs-unfold">
+                    <a class="js-hs-unfold-invoker" href="javascript:;" data-hs-unfold-options='{
+               "target": "#searchDropdown",
+               "type": "css-animation",
+               "animationIn": "fadeIn",
+               "hasOverlay": "rgba(46, 52, 81, 0.1)",
+               "closeBreakpoint": "md"
+             }'>
+                        <i class="tio-clear tio-lg"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+<header id="header" class="navbar navbar-expand-lg navbar-fixed-lg navbar-light">
+    <div class="container">
+        <div class="navbar-nav-wrap">
+            <div class="navbar-brand-wrapper">
+                <a class="navbar-brand" href="/" aria-label="Front" style="color:#978e8e;">
+                    <img style="width:50px; border-radius:100px;" src="..\assets\svg\logos\logo.png" alt="Logo">
+                    Health <span style="font-weight: 900; color: black;">Talk</span>
+                </a>
+            </div>
+            <div class="navbar-nav-wrap-content-left">
+                <div class="d-none d-lg-block">
+                    <form class="position-relative" action="question" method="get">
+                        <div class="input-group input-group-merge navbar-input-group">
+                            <div class="input-group-prepend">
+                                <div class="input-group-text">
+                                    <i class="tio-search"></i>
+                                </div>
+                            </div>
+                            <input type="search" class="js-form-search form-control" name="title" placeholder="Search..." value="@ViewBag.titleSearch">
+                            <a class="input-group-append" href="javascript:;">
+                                <span class="input-group-text">
+                                    <i id="clearSearchResultsIcon" class="tio-clear" style="display: none;"></i>
+                                </span>
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="navbar-nav-wrap-content-right">
+                <ul class="navbar-nav align-items-center flex-row">
+                    <li class="nav-item d-lg-none">
+                        <div class="hs-unfold">
+                            <a class="js-hs-unfold-invoker btn btn-icon btn-ghost-secondary rounded-circle" href="javascript:;" data-hs-unfold-options='{
+                     "target": "#searchDropdown",
+                     "type": "css-animation",
+                     "animationIn": "fadeIn",
+                     "hasOverlay": "rgba(46, 52, 81, 0.1)",
+                     "closeBreakpoint": "md"
+                   }'>
+                                <i class="tio-search"></i>
+                            </a>
+                        </div>
+                    </li>
+                    <li class="nav-item">
+                        <div style="position:relative;">
+                            <i data-toggle="tooltip" data-placement="bottom" title="Registered" class='fas fa-user-check' style='font-size:16px'></i>
+                            <div style="border-radius: 5px; position: absolute; top: -13px; left: -22px; background: #4ec386; padding: 0 6px; font-size: 11px; color: white;">@HttpContextAccessor.HttpContext.Session.GetString("registed")</div>
+                        </div>
+                    </li>
+                    <li class="nav-item">
+                        |
+                    </li>
+                    <li class="nav-item">
+                        <div style="position:relative;">
+                            <i data-toggle="tooltip" data-placement="bottom" title="Logged" class="fas fa-users" style='font-size:16px'></i>
+                            <div style="border-radius: 5px; position: absolute; top: -13px; left: -2px; background: #4ec386; padding: 0 6px; font-size: 11px; color: white;">@HttpContextAccessor.HttpContext.Session.GetString("isAction")</div>
+                        </div>
+                    </li>
+                    <li class="nav-item">
+                        |
+                    </li>
+                    <li class="nav-item">
+                        @if ((User.Identity.IsAuthenticated) && @User.Claims.Skip(2).FirstOrDefault().Value == "USER")
+                        {
+                            <div class="hs-unfold">
+                                <a class="js-hs-unfold-invoker navbar-dropdown-account-wrapper" href="javascript:;" data-hs-unfold-options='{
+                                     "target": "#accountNavbarDropdown",
+                                     "type": "css-animation"
+                                   }'>
+                                    <div class="avatar avatar-sm avatar-circle">
+                                        <img class="avatar-img" src="@HttpContextAccessor.HttpContext.Session.GetString("img")" alt="Image Description">
+                                        <span class="avatar-status avatar-sm-status avatar-status-success"></span>
+                                    </div>
+                                </a>
+                                <div id="accountNavbarDropdown" class="hs-unfold-content dropdown-unfold dropdown-menu dropdown-menu-right navbar-dropdown-menu navbar-dropdown-account" style="width: 16rem;">
+                                    <div class="dropdown-item-text">
+                                        <div class="media align-items-center">
+                                            <div class="avatar avatar-sm avatar-circle mr-2">
+                                                <img class="avatar-img" src="@HttpContextAccessor.HttpContext.Session.GetString("img")" alt="Image Description">
+                                            </div>
+                                            <div class="media-body">
+                                                <span class="card-title h5">@User.Claims.Skip(1).FirstOrDefault().Value</span>
+                                                <span class="card-text">@User.Claims.FirstOrDefault().Value</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="dropdown-divider"></div>
+                                    <a class="dropdown-item" asp-action="Profile" asp-controller="Account" asp-route-id="@User.Claims.Skip(4).FirstOrDefault().Value">
+                                        <span class="text-truncate pr-2" title="Profile &amp; account">Profile &amp; account</span>
+                                    </a>
+                                    <a class="dropdown-item" asp-route="LogOut">
+                                        <span class="text-truncate pr-2" title="Sign out">Sign out</span>
+                                    </a>
+                                </div>
+                            </div>
+                        }
+                        else
+                        {
+                            <a asp-route="LogIn"><button type="button" class="btn btn-outline-success mr-2">LogIn </button></a>
+                        }
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</header>
