@@ -15,14 +15,14 @@ Already a pro? Just edit this README.md and make it your own. Want to make it ea
 
 ```
 cd existing_repo
-git remote add origin https://gitlab.com/phihuukien08072002/doctors-web-forum-fe.git
+git remote add origin https://github.com/dattai2k2/DortorWebBlog.git
 git branch -M main
 git push -uf origin main
 ```
 
 ## Integrate with your tools
 
-- [ ] [Set up project integrations](https://gitlab.com/phihuukien08072002/doctors-web-forum-fe/-/settings/integrations)
+- [ ] [Set up project integrations](https://github.com/dattai2k2/DortorWebBlog/-/settings/integrations)
 
 ## Collaborate with your team
 
